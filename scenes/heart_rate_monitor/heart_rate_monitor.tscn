@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dyy7fj4s25wf1"]
+
+[ext_resource type="Script" path="res://scenes/heart_rate_monitor/heart_rate_monitor.gd" id="1_t57wv"]
+
+[node name="HeartRateMonitor" type="Node"]
+script = ExtResource("1_t57wv")

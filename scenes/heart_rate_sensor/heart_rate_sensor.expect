@@ -1,0 +1,27 @@
+set timeout -1
+spawn bluetoothctl
+
+expect "Agent registered"
+send "scan le\n"
+
+set long_log_file [open "prolonged_captured_values.txt" "w"]
+
+set pattern {[0-9a-fA-F]+\s+[0-9a-fA-F]+\s+[0-9a-fA-F]+\s([0-9a-fA-F]{2})+}
+
+while {1} {
+    expect {
+        -re $pattern {
+            set capturedHexValue $expect_out(1,string)
+            set capturedDecimalValue [scan $capturedHexValue "%x"]
+            set currentTime [timestamp -format "%H:%M:%S"]
+			set log_file [open "captured_values.txt" "w"]
+            puts $log_file "$capturedDecimalValue"
+            puts $long_log_file "$capturedDecimalValue - $currentTime"
+			close $log_file
+        }
+    }
+}
+
+close $long_log_file
+
+expect eof

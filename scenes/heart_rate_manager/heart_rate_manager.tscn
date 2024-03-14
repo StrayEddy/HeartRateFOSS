@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://bkrqc000o15is"]
+
+[ext_resource type="PackedScene" uid="uid://dyy7fj4s25wf1" path="res://scenes/heart_rate_monitor/heart_rate_monitor.tscn" id="1_fatwa"]
+[ext_resource type="Script" path="res://scenes/heart_rate_manager/heart_rate_manager.gd" id="1_vp4a8"]
+
+[node name="HeartRateManager" type="Node"]
+script = ExtResource("1_vp4a8")
+
+[node name="HeartRateMonitor" parent="." instance=ExtResource("1_fatwa")]
+
+[connection signal="hr_high_for_too_long" from="HeartRateMonitor" to="." method="_on_heart_rate_monitor_hr_high_for_too_long"]
+[connection signal="hr_low_for_too_long" from="HeartRateMonitor" to="." method="_on_heart_rate_monitor_hr_low_for_too_long"]
+[connection signal="hr_went_above_high_threshold" from="HeartRateMonitor" to="." method="_on_heart_rate_monitor_hr_went_above_high_threshold"]
+[connection signal="hr_went_below_low_threshold" from="HeartRateMonitor" to="." method="_on_heart_rate_monitor_hr_went_below_low_threshold"]

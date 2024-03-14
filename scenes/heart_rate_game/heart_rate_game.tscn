@@ -1,0 +1,56 @@
+[gd_scene load_steps=7 format=3 uid="uid://7r5axarpkr6s"]
+
+[ext_resource type="Script" path="res://scenes/heart_rate_game/heart_rate_game.gd" id="1_cx0yv"]
+[ext_resource type="PackedScene" uid="uid://c3kw3r51gt6fd" path="res://scenes/heart_rate_game/player.tscn" id="2_fjjfi"]
+[ext_resource type="PackedScene" uid="uid://bkrqc000o15is" path="res://scenes/heart_rate_manager/heart_rate_manager.tscn" id="3_jl4um"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_k1e7f"]
+sky_top_color = Color(0.211765, 0.741176, 0.929412, 1)
+sky_horizon_color = Color(0, 0.764706, 0.572549, 1)
+ground_bottom_color = Color(1, 1, 1, 1)
+
+[sub_resource type="Sky" id="Sky_nsjen"]
+sky_material = SubResource("ProceduralSkyMaterial_k1e7f")
+
+[sub_resource type="Environment" id="Environment_c3eje"]
+background_mode = 2
+sky = SubResource("Sky_nsjen")
+ambient_light_source = 3
+ambient_light_color = Color(0.247059, 1, 1, 1)
+reflected_light_source = 2
+
+[node name="HeartRateGame" type="Node3D"]
+script = ExtResource("1_cx0yv")
+
+[node name="Floor" type="CSGBox3D" parent="."]
+use_collision = true
+size = Vector3(20, 1, 20)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+operation = 2
+size = Vector3(19, 1, 19)
+
+[node name="Player" parent="." instance=ExtResource("2_fjjfi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36521, 0)
+
+[node name="Enemies" type="Node3D" parent="."]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 100, 0)
+light_energy = 50.0
+shadow_enabled = true
+omni_range = 200.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_c3eje")
+
+[node name="SpawnTimer" type="Timer" parent="."]
+wait_time = 0.25
+autostart = true
+
+[node name="HeartRateManager" parent="." instance=ExtResource("3_jl4um")]
+
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
+[connection signal="difficulty_decreased" from="HeartRateManager" to="." method="_on_heart_rate_manager_difficulty_decreased"]
+[connection signal="difficulty_increased" from="HeartRateManager" to="." method="_on_heart_rate_manager_difficulty_increased"]
